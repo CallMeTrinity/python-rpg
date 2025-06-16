@@ -12,7 +12,7 @@ class Jeu:
 
     def __init__(self, nb_joueur):
         self.nb_joueur = nb_joueur
-        self.init_players(nb_joueur)
+        self.init_players()
         self.init_objets()
 
     def create_player(self, c, nom, inventaire=None):
@@ -27,8 +27,8 @@ class Jeu:
                 raise InvalidTypeException(f"La classe : '{c}' n'existe pas.")
         self.joueurs[nom] = new_player
 
-    def init_players(self, nb_joueur):
-        for i in range(nb_joueur):
+    def init_players(self):
+        for i in range(self.nb_joueur):
             print(f"création du joueur {i + 1}")
             nom = input(f"Quel est le nom du joueur n°{i + 1} ")
             print(f"Classes de personnages disponibles : {self.classes}")

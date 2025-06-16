@@ -1,4 +1,4 @@
-from rpg.exception import WeaponAlreadyEquippedException, UnauthorizedActionException
+from rpg.exception import WeaponAlreadyEquippedException, UnauthorizedActionException, InventoryFullException
 
 
 class Personnage:
@@ -15,17 +15,15 @@ class Personnage:
         self.pdv = 100
         self.att = 25
         self.mana = 0
+        self.hand = None
 
     def attaquer(self, adversaire):
         if self.est_mort():
             raise UnauthorizedActionException(f"{self.nom} est mort il ne peut pas attaquer")
         print(f"{self.nom} attaque {adversaire.nom}")
-        if len(self.inventaire) > 0:
-            for objet in self.inventaire:
-                if objet.type_objet == "arme":
-                    self.att += objet.att_boost
-                    print(f"{self.nom} utilise {objet.nom} et obtient un bonus d'attaque de {objet.att_boost}")
-                    break
+        if self.hand is not None:
+            self.att += self.hand.att_boost
+            print(f"{self.nom} utilise {self.hand.nom} et obtient un bonus d'attaque de {self.hand.att_boost}")
         adversaire.pdv -= self.att
         if adversaire.est_mort():
             print(f"{adversaire.nom} est mort")
@@ -35,14 +33,27 @@ class Personnage:
 
 
     def equiper(self, objet):
-        if objet.type_objet == "arme":
-            for objet in self.inventaire:
-                if objet.type_objet == "arme":
-                    raise WeaponAlreadyEquippedException()
-                else:
-                    self.inventaire.append(objet)
+        for el in self.inventaire:
+            if objet.nom == el.nom and self.hand is None:
+                self.hand = el
+                self.inventaire.remove(el)
             else:
-                self.inventaire.append(objet)
+                raise UnauthorizedActionException(f"Cet objet n'est pas dans votre inventaire : {objet.nom}")
+
+
+    def ranger(self, objet):
+        if self.hand is not None:
+            self.inventaire.append(objet)
+            self.hand = None
+        else:
+            UnauthorizedActionException("Vous n'avez rien dans votre main")
+
+
+    def stash(self, objet):
+        if len(self.inventaire) < 6:
+            self.inventaire.append(objet)
+        else:
+            raise InventoryFullException
 
     def fiche_personnage(self):
         print("============")
@@ -60,6 +71,8 @@ class Personnage:
             elif objet.type_objet == "potion":
                 print(f"----Bonus de soin: +{objet.heal}")
                 print(f"----Bonus de mana: +{objet.mana}")
+        if self.hand is not None:
+            print(f"Main: {self.hand.nom}")
         print("============")
 
     @property

@@ -8,6 +8,8 @@ def main():
     master_sword = Arme("Master Sword", att_boost=20)
 
     moi = Guerrier("Antonin", [])
+    moi.stash(master_sword)
+    moi.fiche_personnage()
     moi.equiper(master_sword)
     moi.fiche_personnage()
 

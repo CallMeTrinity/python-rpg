@@ -9,3 +9,6 @@ class UnauthorizedActionException(Exception):
 class InventoryFullException(Exception):
     def __init__(self, message="L'inventaire est déjà plein", *args):
         super().__init__(message, *args)
+class InvalidTypeException(Exception):
+    def __init__(self, message="Le type est non reconnu", *args):
+        super().__init__(message, *args)

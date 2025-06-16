@@ -1,27 +1,12 @@
 from rpg.exception import UnauthorizedActionException
 from rpg.objet import Arme
 from rpg.personnage import Guerrier
-
+from rpg.jeu import Jeu
 
 def main():
 
-    master_sword = Arme("Master Sword", att_boost=20)
+    n = input("Combien de joueurs sont présents ? ")
+    Jeu(int(n))
 
-    moi = Guerrier("Antonin", [])
-    moi.stash(master_sword)
-    moi.fiche_personnage()
-    moi.equiper(master_sword)
-    moi.fiche_personnage()
-
-    adversaire = Guerrier("Adversaire", [])
-    adversaire.fiche_personnage()
-
-    moi.attaquer(adversaire)
-    moi.attaquer(adversaire)
-
-    try:
-        adversaire.attaquer(moi)
-    except UnauthorizedActionException as e:
-        print(e)
 if __name__ == "__main__":
     main()

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from rpg.job import Job
+from rpg.player import Player
 
 
 class Mob(ABC):
@@ -13,7 +14,7 @@ class Mob(ABC):
 
 
 class Npc(Mob):
-    def __init__(self, name: str, job: Job, shop: dict=None):
+    def __init__(self, name: str, job: Job, shop: list=None):
         super().__init__(name)
         self.job = job
         self.shop = shop
@@ -27,6 +28,32 @@ class Npc(Mob):
     def show_shop(self):
         if self.job.seller:
             for item in self.shop:
-                print(item.name)
+                print("________")
+                print(f"{item.display_item()}")
                 if item.type_item == "potion":
-                    print(item.heal)
+                    print(f"soin: {item.heal}")
+                    print(f"mana : {item.mana}")
+                if item.type_item == "weapon":
+                    print(f"Amélioration d'attaque: {item.att_boost}")
+        else:
+            print(f"{self.name} ne vend rien")
+
+class Hostile(Mob):
+    def __init__(self, name: str, pv: int , damage: int, loot_table: dict[str, int]):
+        super().__init__(name)
+        self.pv = pv
+        self.damage = damage
+        self.loot_table = loot_table
+        self.dead = False
+
+    def description(self):
+        print(f"{self.name} est hostile")
+
+    def attack(self, player: Player):
+        if not player.is_dead():
+            print(f"{self.name} attaque {player.name}")
+            player.pv -= self.damage
+
+    def is_dead(self):
+        if self.pv <= 0:
+            self.dead = True

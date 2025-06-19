@@ -15,6 +15,7 @@ class Player:
         self.pv = 100
         self.att = 25
         self.mana = 0
+        self.gold = 0
         self.hand = None
 
     def attack(self, enemy):
@@ -74,6 +75,11 @@ class Player:
         if self.hand is not None:
             print(f"Main: {self.hand.name}")
         print("============")
+
+    def buy(self, item, seller):
+        if self.gold >= item.value:
+            self.gold -= item.value
+            seller.shop.remove(item)
 
     @property
     def classe(self):

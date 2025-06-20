@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+from random import randint
 
+from rpg.item import Item
 from rpg.job import Job
 from rpg.player import Player
 
@@ -14,7 +16,7 @@ class Mob(ABC):
 
 
 class Npc(Mob):
-    def __init__(self, name: str, job: Job, shop: list=None):
+    def __init__(self, name: str, job: Job, shop: list = None):
         super().__init__(name)
         self.job = job
         self.shop = shop
@@ -38,13 +40,13 @@ class Npc(Mob):
         else:
             print(f"{self.name} ne vend rien")
 
+
 class Hostile(Mob):
-    def __init__(self, name: str, pv: int , damage: int, loot_table: dict[str, int]):
+    def __init__(self, name: str, pv: int, damage: int, loot_table: dict[Item, dict[int, tuple[int, int]]]):
         super().__init__(name)
         self.pv = pv
         self.damage = damage
         self.loot_table = loot_table
-        self.dead = False
 
     def description(self):
         print(f"{self.name} est hostile")
@@ -55,5 +57,15 @@ class Hostile(Mob):
             player.pv -= self.damage
 
     def is_dead(self):
-        if self.pv <= 0:
-            self.dead = True
+        return self.pv <= 0
+
+    def drop(self) -> list[Item]:
+        drops = []
+
+        for loot_item, prob_data in self.loot_table.items():
+            for prob, (min_qty, max_qty) in prob_data.items():
+                probability_index = randint(1, 100)
+                if prob <= probability_index:
+                    quantity = randint(min_qty, max_qty)
+                    drops.append([loot_item, quantity])
+        return drops

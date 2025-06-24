@@ -2,6 +2,7 @@ from random import randint
 
 from rpg.exception import InvalidTypeException
 from rpg.item import Weapon, Potion
+from rpg.mob import Hostile
 from rpg.player import Wizard, Barbarian
 
 
@@ -9,11 +10,24 @@ class Game:
     classes = ['wizard', 'barbarian']
     players = {}
     items = []
+    hostiles = []
+    player_names= []
 
     def __init__(self, player_count):
         self.player_count = player_count
         self.init_players()
         self.init_items()
+        self.init_mobs()
+
+        for player in self.players:
+            self.player_names.append(self.players[player].name)
+            print(self.players[player].player_sheet())
+
+        z = self.hostiles[0]
+        z.description()
+        while not z.is_dead():
+            self.players[self.player_names[0]].attack(z)
+        dropped_items = z.drop()
 
     def create_player(self, c, name, inventory=None):
         if inventory is None:
@@ -41,6 +55,28 @@ class Game:
         nb_items = 4 * self.player_count
         for i in range(randint(2, nb_items)):
             if i + 1 <= round(0.5 * nb_items):
-                self.items.append(Weapon(f"Arme-{i}", randint(10, 30)))
+                random_damage_boost = randint(10, 30)
+                if random_damage_boost > 20:
+                    random_value = randint(15, 30)
+                else:
+                    random_value = randint(5, 15)
+                self.items.append(Weapon(f"Arme-{i}", random_damage_boost, random_value))
             else:
-                self.items.append(Potion(f"Potion-{i}", randint(10, 30), randint(25, 50)))
+                random_heath = randint(10, 30)
+                random_mana = randint(25, 50)
+                if random_heath > 20:
+                    random_value = randint(10, random_heath)
+                elif random_mana > 35:
+                    random_value = randint(20, random_mana)
+                else:
+                    random_value = 0
+                self.items.append(Potion(f"Potion-{i}", random_heath, random_mana, random_value))
+
+    def init_mobs(self):
+        for i in range(10):
+            z = self.create_hostile('zombie')
+            self.hostiles.append(z)
+
+    def create_hostile(self, name):
+        mob = Hostile(name, 100, 10,{self.items[1]: {100: (1,1)}})
+        return mob

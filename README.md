@@ -74,7 +74,7 @@ rpg/
 ### 🔹 4. **Combat de base**
 
 * Système d’attaque simple entre personnages
-* Morts gérés par PV ≤ 0
+* Morts gérés par hp ≤ 0
 
 ---
 

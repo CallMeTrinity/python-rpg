@@ -2,17 +2,11 @@ from rpg.exception import WeaponAlreadyEquippedException, UnauthorizedActionExce
 
 
 class Player:
-    """
-    string name
-    string[] inventory
-    int pv
-    int att
-    """
 
     def __init__(self, name, inventory):
         self.name = name
         self.inventory = inventory
-        self.pv = 100
+        self.hp = 100
         self.att = 25
         self.mana = 0
         self.gold = 0
@@ -25,11 +19,11 @@ class Player:
         if self.hand is not None:
             self.att += self.hand.att_boost
             print(f"{self.name} utilise {self.hand.name} et obtient un bonus d'attaque de {self.hand.att_boost}")
-        enemy.pv -= self.att
+        enemy.hp -= self.att
         if enemy.is_dead():
             print(f"{enemy.name} est mort")
         else:
-            print(f"{enemy.name} a {enemy.pv} PV restant")
+            print(f"{enemy.name} a {enemy.hp} hp restant")
 
 
 
@@ -57,10 +51,10 @@ class Player:
             raise InventoryFullException
 
     def player_sheet(self):
-        print("============")
+        print("=====PLAYER=====")
         print(f"name: {self.name}")
         print(f"Classe: {self.classe}")
-        print(f"Vie: {self.pv}")
+        print(f"Vie: {self.hp}")
         print(f"Attaque: {self.att}")
         print(f"Mana: {self.mana}")
         print("inventory:")
@@ -86,7 +80,7 @@ class Player:
         return self.__class__.__name__.lower()
 
     def is_dead(self):
-        return self.pv <= 0
+        return self.hp <= 0
 
 class Barbarian(Player):
 

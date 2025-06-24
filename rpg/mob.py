@@ -42,22 +42,24 @@ class Npc(Mob):
 
 
 class Hostile(Mob):
-    def __init__(self, name: str, pv: int, damage: int, loot_table: dict[Item, dict[int, tuple[int, int]]]):
+    def __init__(self, name: str, hp: int, damage: int, loot_table: dict[Item, dict[int, tuple[int, int]]]):
         super().__init__(name)
-        self.pv = pv
+        self.hp = hp
         self.damage = damage
         self.loot_table = loot_table
 
     def description(self):
-        print(f"{self.name} est hostile")
+        print("=====MOB=====")
+        print(f"{self.name} est hostile\nHP: {self.hp}\nDégât: {self.damage}" )
+        print("=============")
 
     def attack(self, player: Player):
         if not player.is_dead():
             print(f"{self.name} attaque {player.name}")
-            player.pv -= self.damage
+            player.hp -= self.damage
 
     def is_dead(self):
-        return self.pv <= 0
+        return self.hp <= 0
 
     def drop(self) -> list[Item]:
         drops = []
@@ -65,7 +67,10 @@ class Hostile(Mob):
         for loot_item, prob_data in self.loot_table.items():
             for prob, (min_qty, max_qty) in prob_data.items():
                 probability_index = randint(1, 100)
-                if prob <= probability_index:
+                if probability_index <= prob:
                     quantity = randint(min_qty, max_qty)
                     drops.append([loot_item, quantity])
+        print(f"dropping {len(drops)} item(s)")
+        for drop, quantity in drops:
+            drop.display_item()
         return drops

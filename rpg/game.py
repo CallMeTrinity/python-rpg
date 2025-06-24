@@ -7,13 +7,14 @@ from rpg.player import Wizard, Barbarian
 
 
 class Game:
-    classes = ['wizard', 'barbarian']
-    players = {}
-    items = []
-    hostiles = []
-    player_names= []
+
 
     def __init__(self, player_count):
+        self.classes = ['wizard', 'barbarian']
+        self.players = {}
+        self.items = []
+        self.hostiles = []
+        self.player_names = []
         self.player_count = player_count
         self.init_players()
         self.init_items()

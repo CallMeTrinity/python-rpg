@@ -11,6 +11,7 @@ class Player:
         self.mana = 0
         self.gold = 0
         self.hand = None
+        self.followed_quest = None
 
     def attack(self, enemy):
         if self.is_dead():
@@ -81,6 +82,15 @@ class Player:
 
     def is_dead(self):
         return self.hp <= 0
+
+    def follow_quest(self, quest):
+        self.followed_quest = quest
+
+    def start_followed_quest(self):
+        if self.followed_quest is not None:
+            self.followed_quest.start()
+        else:
+            print("Vous ne suivez aucune quête")
 
 class Barbarian(Player):
 

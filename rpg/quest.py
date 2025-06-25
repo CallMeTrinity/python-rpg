@@ -4,9 +4,10 @@ from rpg.player import Player
 
 
 class Quest(ABC):
-    def __init__(self, title: str, description: str):
+    def __init__(self, title: str, description: str, victory_message: str):
         self.title = title
         self.description = description
+        self.victory_message = victory_message
         self.completed = False
 
     @abstractmethod
@@ -15,11 +16,11 @@ class Quest(ABC):
 
     def mark_completed(self):
         self.completed = True
-        print(f"✅ Quête '{self.title}' complétée !")
+        print(self.victory_message)
 
 class DialogQuest(Quest):
-    def __init__(self, title, description, question, choices, correct_choice):
-        super().__init__(title, description)
+    def __init__(self, title, description, victory_message,question: str, choices: list, correct_choice: int):
+        super().__init__(title, description, victory_message)
         self.question = question
         self.choices = choices
         self.correct_choice = correct_choice
@@ -29,10 +30,10 @@ class DialogQuest(Quest):
         print(f"{self.question}")
 
         for idx, choice in enumerate(self.choices, 1):
-            print(f"{idx} : {choice}")
+            print(f"[{idx}] : {choice}")
         try:
             answer = int(input("Votre réponse : "))
-            if self.choices[answer - 1] == self.correct_choice:
+            if str(answer) == str(self.correct_choice):
                 self.mark_completed()
             else:
                 print("Perdu !")

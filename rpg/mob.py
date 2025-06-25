@@ -4,6 +4,7 @@ from random import randint
 from rpg.item import Item
 from rpg.job import Job
 from rpg.player import Player
+from rpg.quest import Quest
 
 
 class Mob(ABC):
@@ -16,10 +17,11 @@ class Mob(ABC):
 
 
 class Npc(Mob):
-    def __init__(self, name: str, job: Job, shop: list = None):
+    def __init__(self, name: str, job: Job, shop: list = None, quest: Quest = None):
         super().__init__(name)
         self.job = job
         self.shop = shop
+        self.quest = quest
 
     def description(self):
         print(f"Pnj {self.name} est un {self.job.__name__}")
@@ -39,6 +41,12 @@ class Npc(Mob):
                     print(f"Amélioration d'attaque: {item.att_boost}")
         else:
             print(f"{self.name} ne vend rien")
+
+    def give_quest(self, player: Player):
+        if self.quest:
+            print("Voici un quête")
+            print(f"{self.quest.title}")
+            player.follow_quest(self.quest)
 
 
 class Hostile(Mob):

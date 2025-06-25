@@ -2,8 +2,10 @@ from random import randint
 
 from rpg.exception import InvalidTypeException
 from rpg.item import Weapon, Potion
-from rpg.mob import Hostile
+from rpg.job import Job
+from rpg.mob import Hostile, Npc
 from rpg.player import Wizard, Barbarian
+from rpg.quest import Quest, DialogQuest
 
 
 class Game:
@@ -29,6 +31,13 @@ class Game:
         while not z.is_dead():
             self.players[self.player_names[0]].attack(z)
         dropped_items = z.drop()
+
+        quest = DialogQuest("Test", "Une quête de test","Bravo vous avez finis la quête !", "Sens de la vie ?", ["41", "42"], 2)
+        job = Job("Villageois", False)
+        npc = Npc("Roger", job, None, quest)
+
+        npc.give_quest(self.players[self.player_names[0]])
+        self.players[self.player_names[0]].start_followed_quest()
 
     def create_player(self, c, name, inventory=None):
         if inventory is None:

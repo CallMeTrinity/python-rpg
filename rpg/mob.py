@@ -44,7 +44,6 @@ class Npc(Mob):
 
     def give_quest(self, player: Player):
         if self.quest:
-            print("Voici un quête")
             print(f"{self.quest.title}")
             player.follow_quest(self.quest)
 

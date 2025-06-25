@@ -12,6 +12,8 @@ class Player:
         self.gold = 0
         self.hand = None
         self.followed_quest = None
+        self.xp = 0
+        self.level = 1
 
     def attack(self, enemy):
         if self.is_dead():
@@ -55,6 +57,9 @@ class Player:
         print("=====PLAYER=====")
         print(f"name: {self.name}")
         print(f"Classe: {self.classe}")
+        print(f"Niveau: {self.level}")
+        print(f"XP: {self.xp}")
+        print(f"Or: {self.gold}")
         print(f"Vie: {self.hp}")
         print(f"Attaque: {self.att}")
         print(f"Mana: {self.mana}")
@@ -91,6 +96,17 @@ class Player:
             self.followed_quest.start()
         else:
             print("Vous ne suivez aucune quête")
+
+    def add_xp(self, xp: int):
+        if self.xp + xp >= 100:
+            self.xp += xp
+            self.xp %= 100
+            self.level += 1
+            print(f"⭐Niveau {self.level - 1} -> {self.level} ⭐")
+        else:
+            self.xp += xp
+        print(f"Vous avez gagné {xp} point d'xp et vous êtes niveau {self.level}")
+
 
 class Barbarian(Player):
 

@@ -14,6 +14,10 @@ class Quest(ABC):
     def start(self):
         pass
 
+    @abstractmethod
+    def reward(self, player: Player, xp: int, gold: int):
+        pass
+
     def mark_completed(self):
         self.completed = True
         print(self.victory_message)
@@ -41,4 +45,9 @@ class DialogQuest(Quest):
         except (ValueError, IndexError):
             print("Entrée Invalid")
 
+    def reward(self, player, xp, gold):
+        print(f"+{xp}xp")
+        print(f"+{gold} gold")
+        player.add_xp(xp)
+        player.gold += gold
 # Maybe Class ActionQuest in the future

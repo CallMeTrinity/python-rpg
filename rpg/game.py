@@ -1,11 +1,12 @@
 from random import randint
+from time import sleep
 
 from rpg.exception import InvalidTypeException
 from rpg.item import Weapon, Potion
 from rpg.job import Job
 from rpg.mob import Hostile, Npc
 from rpg.player import Wizard, Barbarian
-from rpg.quest import Quest, DialogQuest
+from rpg.quest import DialogQuest
 
 
 class Game:
@@ -18,26 +19,35 @@ class Game:
         self.hostiles = []
         self.player_names = []
         self.player_count = player_count
+
         self.init_players()
         self.init_items()
         self.init_mobs()
+        self.play()
 
+
+    def play(self):
         for player in self.players:
             self.player_names.append(self.players[player].name)
             print(self.players[player].player_sheet())
+            sleep(1)
 
         z = self.hostiles[0]
         z.description()
+        sleep(1)
         while not z.is_dead():
             self.players[self.player_names[0]].attack(z)
         dropped_items = z.drop()
-
+        sleep(1)
         quest = DialogQuest("Test", "Une quête de test","Bravo vous avez finis la quête !", "Sens de la vie ?", ["41", "42"], 2)
         job = Job("Villageois", False)
         npc = Npc("Roger", job, None, quest)
 
         npc.give_quest(self.players[self.player_names[0]])
         self.players[self.player_names[0]].start_followed_quest()
+        if self.players[self.player_names[0]].followed_quest.completed:
+            self.players[self.player_names[0]].followed_quest.reward(self.players[self.player_names[0]],150, 10)
+        self.players[self.player_names[0]].player_sheet()
 
     def create_player(self, c, name, inventory=None):
         if inventory is None:

@@ -7,7 +7,7 @@ from rpg.job import Job
 from rpg.mob import Hostile, Npc
 from rpg.player import Wizard, Barbarian
 from rpg.quest import DialogQuest
-
+from rpg.turn import Turn
 
 class Game:
 
@@ -23,7 +23,10 @@ class Game:
         self.init_players()
         self.init_items()
         self.init_mobs()
-        self.play()
+
+        turn = Turn(self.players)
+        turn.play()
+        # self.play()
 
 
     def play(self):
